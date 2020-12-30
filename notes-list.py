@@ -3,6 +3,7 @@ import os
 from PyQt5 import QtGui
 from PyQt5.QtWidgets import QApplication, QWidget, QListWidget, QLabel, QVBoxLayout, QPlainTextEdit, QLineEdit, \
     QHBoxLayout
+from PyQt5.QtWidgets import QTabWidget
 import sys
 
 from utils import build_file_list, search, read_file_content, file_put_content
@@ -52,13 +53,21 @@ class Window(QWidget):
         # self.label.setFont(QtGui.QFont("Sanserif", 15))
         # hbox.addWidget(self.label)
 
+        self.tab_bar = QTabWidget(self)
+        # self.notes_content_tab = QWidget()
+        # self.notes_preview = QWidget()
+
         self.noteContent = QPlainTextEdit()
+        self.tab_bar.addTab(self.noteContent, "note")
         # self.noteContent.setFixedWidth(400)
-        hbox.addWidget(self.noteContent)
+        # hbox.addWidget(self.noteContent)
 
         self.web_view = QWebEngineView()
-        self.web_view.setHtml("<html><body>body</body></html>")
-        hbox.addWidget(self.web_view)
+        self.web_view.setHtml("")
+        # hbox.addWidget(self.web_view)
+        self.tab_bar.addTab(self.web_view, "preview")
+
+        hbox.addWidget(self.tab_bar)
 
         self.setLayout(vbox)
         self.show()
