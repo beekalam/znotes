@@ -6,6 +6,9 @@ from PyQt5.QtWidgets import QApplication, QWidget, QListWidget, QLabel, QVBoxLay
 import sys
 
 from utils import build_file_list, search, read_file_content, file_put_content
+from PyQt5.QtWebEngineWidgets import QWebEngineView
+import markdown
+from mdx_gfm import GithubFlavoredMarkdownExtension
 
 
 class Window(QWidget):
@@ -25,6 +28,7 @@ class Window(QWidget):
         self.setGeometry(self.left, self.top, self.width, self.height)
         vbox = QVBoxLayout()
 
+        # search bar
         self.search = QLineEdit(self)
         self.search.returnPressed.connect(self.doSearch)
         self.search.setFixedHeight(50)
@@ -34,6 +38,8 @@ class Window(QWidget):
         hbox.setSpacing(0)
         hbox.setContentsMargins(0, 0, 0, 0)
         vbox.addLayout(hbox)
+
+        # notes list
         self.list = QListWidget()
         # self.list.setFixedWidth(400)
         for i, path in enumerate(build_file_list()):
@@ -50,6 +56,10 @@ class Window(QWidget):
         # self.noteContent.setFixedWidth(400)
         hbox.addWidget(self.noteContent)
 
+        self.web_view = QWebEngineView()
+        self.web_view.setHtml("<html><body>body</body></html>")
+        hbox.addWidget(self.web_view)
+
         self.setLayout(vbox)
         self.show()
 
@@ -61,8 +71,11 @@ class Window(QWidget):
                 file_put_content(self.prev_note, self.noteContent.toPlainText())
             self.prev_note = item.text()
             with open(item.text()) as f:
+                content = f.read()
                 self.noteContent.clear()
-                self.noteContent.setPlainText(f.read())
+                self.noteContent.setPlainText(content)
+                self.web_view.setHtml(markdown.markdown(content,
+                                                        extensions=[GithubFlavoredMarkdownExtension()]))
 
     def doSearch(self):
         self.list.clear()
