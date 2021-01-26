@@ -31,9 +31,26 @@ class Notes(QMainWindow):
         self.createSearchWidget()
         self.createNotePreview()
         self.createNoteList()
+        self.createMenu()
         self.createStatusBar()
 
         self.show()
+
+    def createMenu(self):
+        self.exit_act = QAction('Exit', self)
+        self.exit_act.setShortcut('Ctrl+Q')
+        self.exit_act.setStatusTip('Quit program')
+        self.exit_act.triggered.connect(self.close)
+
+        self.save_act = QAction('Save', self)
+        self.save_act.setShortcut('Ctrl+S')
+        self.save_act.triggered.connect(self.update_current_note)
+
+        menu_bar = self.menuBar()
+
+        file_menu = menu_bar.addMenu('File')
+        file_menu.addAction(self.save_act)
+        file_menu.addAction(self.exit_act)
 
     def createStatusBar(self):
         self.setStatusBar(QStatusBar(self))
@@ -78,8 +95,8 @@ class Notes(QMainWindow):
                 content = f.read()
                 self.noteContent.clear()
                 self.noteContent.setPlainText(content)
-                self.web_view.setHtml(markdown.markdown(content,
-                                                        extensions=[GithubFlavoredMarkdownExtension()]))
+                markdown_content = markdown.markdown(content, extensions=[GithubFlavoredMarkdownExtension()])
+                self.web_view.setHtml(markdown_content)
 
     def update_current_note(self):
         if self.current_note_path is not None and read_file_content(
