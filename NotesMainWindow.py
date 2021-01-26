@@ -22,6 +22,7 @@ class Notes(QMainWindow):
         self.tab_bar = QTabWidget(self)
         self.search = QLineEdit(self)
         self.prev_note = None
+        self.current_note = None
         self.InitializeUI()
 
     def InitializeUI(self):
@@ -30,7 +31,8 @@ class Notes(QMainWindow):
 
         self.createSearchWidget()
         self.createNotePreview()
-        self.createDockWidget()
+        self.createNoteList()
+
 
         self.show()
 
@@ -53,7 +55,7 @@ class Notes(QMainWindow):
         self.tab_bar.addTab(self.web_view, "preview")
         self.setCentralWidget(self.tab_bar)
 
-    def createDockWidget(self):
+    def createNoteList(self):
         dock_widget = QDockWidget()
         dock_widget.setWindowTitle('example dock')
         dock_widget.setAllowedAreas(Qt.AllDockWidgetAreas)
