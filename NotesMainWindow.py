@@ -2,7 +2,7 @@ import os
 
 from PyQt5 import QtGui, Qt
 from PyQt5.QtWidgets import QApplication, QWidget, QListWidget, QVBoxLayout, QPlainTextEdit, QLineEdit, \
-    QHBoxLayout, QAction, QMainWindow, QDockWidget, QTextEdit
+    QHBoxLayout, QAction, QMainWindow, QDockWidget, QTextEdit, QStatusBar
 from PyQt5.QtWidgets import QTabWidget
 from PyQt5.QtCore import Qt
 import sys
@@ -32,9 +32,12 @@ class Notes(QMainWindow):
         self.createSearchWidget()
         self.createNotePreview()
         self.createNoteList()
-
+        self.createStatusBar()
 
         self.show()
+
+    def createStatusBar(self):
+        self.setStatusBar(QStatusBar(self))
 
     def createSearchWidget(self):
         dock_widget = QDockWidget()
@@ -73,6 +76,7 @@ class Notes(QMainWindow):
                 print("writing new content....")
                 file_put_content(self.prev_note, self.noteContent.toPlainText())
             self.prev_note = item.text()
+            self.statusBar().showMessage(self.prev_note)
             with open(item.text()) as f:
                 content = f.read()
                 self.noteContent.clear()
