@@ -37,20 +37,19 @@ class Notes(QMainWindow):
         self.show()
 
     def createMenu(self):
+        menu_bar = self.menuBar()
+        file_menu = menu_bar.addMenu('File')
+
         self.exit_act = QAction('Exit', self)
         self.exit_act.setShortcut('Ctrl+Q')
         self.exit_act.setStatusTip('Quit program')
         self.exit_act.triggered.connect(self.close)
+        file_menu.addAction(self.exit_act)
 
         self.save_act = QAction('Save', self)
         self.save_act.setShortcut('Ctrl+S')
         self.save_act.triggered.connect(self.update_current_note)
-
-        menu_bar = self.menuBar()
-
-        file_menu = menu_bar.addMenu('File')
         file_menu.addAction(self.save_act)
-        file_menu.addAction(self.exit_act)
 
     def createStatusBar(self):
         self.setStatusBar(QStatusBar(self))
