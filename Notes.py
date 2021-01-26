@@ -7,7 +7,7 @@ from PyQt5.QtWidgets import QTabWidget
 from PyQt5.QtCore import Qt
 import sys
 
-from NewNote import NewNote
+from _NewNote import NewNote
 from utils import build_file_list, search, read_file_content, file_put_content
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 import markdown
