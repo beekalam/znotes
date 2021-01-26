@@ -16,6 +16,11 @@ from mdx_gfm import GithubFlavoredMarkdownExtension
 class Notes(QMainWindow):
     def __init__(self):
         super().__init__()
+        self.list = QListWidget()
+        self.web_view = QWebEngineView()
+        self.noteContent = QPlainTextEdit()
+        self.tab_bar = QTabWidget(self)
+        self.search = QLineEdit(self)
         self.prev_note = None
         self.InitializeUI()
 
@@ -34,7 +39,6 @@ class Notes(QMainWindow):
         dock_widget.setWindowTitle('example dock')
         dock_widget.setAllowedAreas(Qt.AllDockWidgetAreas)
 
-        self.search = QLineEdit(self)
         self.search.returnPressed.connect(self.doSearch)
         self.search.setFixedHeight(50)
         dock_widget.setWidget(self.search)
@@ -43,12 +47,8 @@ class Notes(QMainWindow):
 
     def createNotePreview(self):
 
-        self.tab_bar = QTabWidget(self)
-
-        self.noteContent = QPlainTextEdit()
         self.tab_bar.addTab(self.noteContent, "note")
 
-        self.web_view = QWebEngineView()
         self.web_view.setHtml("")
         self.tab_bar.addTab(self.web_view, "preview")
         self.setCentralWidget(self.tab_bar)
@@ -58,7 +58,6 @@ class Notes(QMainWindow):
         dock_widget.setWindowTitle('example dock')
         dock_widget.setAllowedAreas(Qt.AllDockWidgetAreas)
 
-        self.list = QListWidget()
         dock_widget.setWidget(self.list)
         for i, path in enumerate(build_file_list()):
             self.list.insertItem(i, path)
