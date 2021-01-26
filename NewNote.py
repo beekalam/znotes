@@ -40,8 +40,8 @@ def build_tags_list():
 
 # class ExampleWindow(QMainWindow):
 class NewNote(QWidget):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, parent=None):
+        super().__init__(parent)
         # QMainWindow.__init__(self)
 
         self.setMinimumSize(QSize(440, 240))

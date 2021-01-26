@@ -1,100 +1,117 @@
 import os
 
-from PyQt5 import QtGui
+from PyQt5 import QtGui, Qt
 from PyQt5.QtWidgets import QApplication, QWidget, QListWidget, QVBoxLayout, QPlainTextEdit, QLineEdit, \
-    QHBoxLayout, QAction
+    QHBoxLayout, QAction, QMainWindow, QDockWidget, QTextEdit, QStatusBar
 from PyQt5.QtWidgets import QTabWidget
+from PyQt5.QtCore import Qt
 import sys
 
+from NewNote import NewNote
 from utils import build_file_list, search, read_file_content, file_put_content
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 import markdown
 from mdx_gfm import GithubFlavoredMarkdownExtension
 
 
-class Notes(QWidget):
+class Notes(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.title = "PyQt5 QListWidget"
-        self.top = 200
-        self.left = 500
-        self.width = 400
-        self.height = 300
-        self.prev_note = None
-        self.InitWindow()
+        self.list = QListWidget()
+        self.web_view = QWebEngineView()
+        self.noteContent = QPlainTextEdit()
+        self.tab_bar = QTabWidget(self)
+        self.search = QLineEdit(self)
+        self.current_note_path = None
+        self.InitializeUI()
+
+    def InitializeUI(self):
+        self.setWindowIcon(QtGui.QIcon("icon.png"))
+        self.setWindowTitle("Notes List")
+
+        self.createSearchWidget()
+        self.createNotePreview()
+        self.createNoteList()
+        self.createMenu()
+        self.createStatusBar()
+
+        self.show()
+
+    def create_new_note(self):
+        self.dialog = NewNote(self)
+        self.dialog.show()
 
     def createMenu(self):
-        exit_act = QAction('Exit', self)
-        exit_act.setShortcut('Ctr+Q')
-
         menu_bar = self.menuBar()
-        menu_bar.setNativeMenuBar(False)
-
         file_menu = menu_bar.addMenu('File')
-        file_menu.addAction(exit_act)
 
-    def InitWindow(self):
-        self.setWindowIcon(QtGui.QIcon("icon.png"))
-        self.setWindowTitle(self.title)
-        self.setGeometry(self.left, self.top, self.width, self.height)
-        vbox = QVBoxLayout()
+        self.new_act = QAction('New Note', self)
+        self.new_act.setShortcut('Ctrl+N')
+        self.new_act.triggered.connect(self.create_new_note)
+        file_menu.addAction(self.new_act)
 
-        # search bar
-        self.search = QLineEdit(self)
+        self.save_act = QAction('Save', self)
+        self.save_act.setShortcut('Ctrl+S')
+        self.save_act.triggered.connect(self.update_current_note)
+        file_menu.addAction(self.save_act)
+
+        self.exit_act = QAction('Exit', self)
+        self.exit_act.setShortcut('Ctrl+Q')
+        self.exit_act.setStatusTip('Quit program')
+        self.exit_act.triggered.connect(self.close)
+        file_menu.addAction(self.exit_act)
+
+    def createStatusBar(self):
+        self.setStatusBar(QStatusBar(self))
+
+    def createSearchWidget(self):
+        dock_widget = QDockWidget()
+        dock_widget.setWindowTitle('example dock')
+        dock_widget.setAllowedAreas(Qt.AllDockWidgetAreas)
+
         self.search.returnPressed.connect(self.doSearch)
         self.search.setFixedHeight(50)
-        vbox.addWidget(self.search)
+        dock_widget.setWidget(self.search)
 
-        hbox = QHBoxLayout()
-        hbox.setSpacing(0)
-        hbox.setContentsMargins(0, 0, 0, 0)
-        vbox.addLayout(hbox)
+        self.addDockWidget(Qt.LeftDockWidgetArea, dock_widget)
 
-        # notes list
-        self.list = QListWidget()
-        # self.list.setFixedWidth(400)
+    def createNotePreview(self):
+
+        self.tab_bar.addTab(self.noteContent, "note")
+
+        self.web_view.setHtml("")
+        self.tab_bar.addTab(self.web_view, "preview")
+        self.setCentralWidget(self.tab_bar)
+
+    def createNoteList(self):
+        dock_widget = QDockWidget()
+        dock_widget.setWindowTitle('example dock')
+        dock_widget.setAllowedAreas(Qt.AllDockWidgetAreas)
+
+        dock_widget.setWidget(self.list)
         for i, path in enumerate(build_file_list()):
             self.list.insertItem(i, path)
-        # self.list.clicked.connect(self.listview_clicked)
         self.list.currentRowChanged.connect(self.listview_clicked)
-        hbox.addWidget(self.list)
-
-        # self.label = QLabel()
-        # self.label.setFont(QtGui.QFont("Sanserif", 15))
-        # hbox.addWidget(self.label)
-
-        self.tab_bar = QTabWidget(self)
-        # self.notes_content_tab = QWidget()
-        # self.notes_preview = QWidget()
-
-        self.noteContent = QPlainTextEdit()
-        self.tab_bar.addTab(self.noteContent, "note")
-        # self.noteContent.setFixedWidth(400)
-        # hbox.addWidget(self.noteContent)
-
-        self.web_view = QWebEngineView()
-        self.web_view.setHtml("")
-        # hbox.addWidget(self.web_view)
-        self.tab_bar.addTab(self.web_view, "preview")
-
-        hbox.addWidget(self.tab_bar)
-
-        self.setLayout(vbox)
-        self.show()
+        self.addDockWidget(Qt.LeftDockWidgetArea, dock_widget)
 
     def listview_clicked(self):
         item = self.list.currentItem()
         if item is not None and item.text() is not None and os.path.isfile(item.text()):
-            if self.prev_note is not None and read_file_content(self.prev_note) != self.noteContent.toPlainText():
-                print("writing new content....")
-                file_put_content(self.prev_note, self.noteContent.toPlainText())
-            self.prev_note = item.text()
+            self.update_current_note()
+            self.current_note_path = item.text()
+            self.statusBar().showMessage(self.current_note_path)
             with open(item.text()) as f:
                 content = f.read()
                 self.noteContent.clear()
                 self.noteContent.setPlainText(content)
-                self.web_view.setHtml(markdown.markdown(content,
-                                                        extensions=[GithubFlavoredMarkdownExtension()]))
+                markdown_content = markdown.markdown(content, extensions=[GithubFlavoredMarkdownExtension()])
+                self.web_view.setHtml(markdown_content)
+
+    def update_current_note(self):
+        if self.current_note_path is not None and read_file_content(
+                self.current_note_path) != self.noteContent.toPlainText():
+            print("writing new content....")
+            file_put_content(self.current_note_path, self.noteContent.toPlainText())
 
     def doSearch(self):
         self.list.clear()
@@ -105,12 +122,9 @@ class Notes(QWidget):
             res = search(self.search.text())
             for i, path in enumerate(res):
                 self.list.insertItem(i, path)
-        # terms = self.search.text().split(":")
-        # tags = [t.strip('#') for t in terms if t.startswith('#')]
-        # print(tags)
-        # print(search)
 
 
-App = QApplication(sys.argv)
-window = Notes()
-sys.exit(App.exec())
+if __name__ == '__main__':
+    App = QApplication(sys.argv)
+    window = Notes()
+    sys.exit(App.exec())
