@@ -42,44 +42,33 @@ def build_tags_list():
 class NewNote(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
-        # QMainWindow.__init__(self)
 
         self.setMinimumSize(QSize(440, 240))
-        self.setWindowTitle("PyQt5 Clipboard example...")
+        self.setWindowTitle("New Note")
         vbox = QVBoxLayout()
 
         # title
         self.title = QLineEdit(self)
-        # self.title.move(10, 10)
-        # self.title.resize(400, 40)
         vbox.addWidget(self.title)
 
         # tags
         self.tag = QLineEdit(self)
-        # self.tag.move(10, 270)
         self.tag.resize(400, 40)
         vbox.addWidget(self.tag)
-        # self.tag.addItems(build_tags_list())
 
         # Add text field
         self.content = QPlainTextEdit(self)
         self.content.insertPlainText(QApplication.clipboard().text())
-        # self.content.move(10, 60)
         self.content.resize(400, 200)
         vbox.addWidget(self.content)
 
         # button
         self.save_btn = QPushButton('Save', self)
-        # self.save_btn.move(10, 310)
         self.save_btn.resize(400, 40)
         self.save_btn.clicked.connect(self.save_btn_click)
         vbox.addWidget(self.save_btn)
 
         self.setLayout(vbox)
-        # self.show()
-        # save
-
-        # QApplication.clipboard().dataChanged.connect(self.clipboardChanged)
 
     def save_btn_click(self):
         title = self.title.text()
@@ -107,8 +96,6 @@ class NewNote(QWidget):
         text = QApplication.clipboard().text()
         print(text)
         self.b.insertPlainText(text + '\n')
-
-    # def buildTags(self):
 
 
 if __name__ == "__main__":
