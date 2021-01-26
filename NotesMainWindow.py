@@ -23,9 +23,8 @@ class Notes(QMainWindow):
         self.setWindowIcon(QtGui.QIcon("icon.png"))
         self.setWindowTitle("Notes List")
 
-        # set central widget for main window
         self.createSearchWidget()
-        self.createCentralWidget()
+        self.createNotePreview()
         self.createDockWidget()
 
         self.show()
@@ -42,7 +41,7 @@ class Notes(QMainWindow):
 
         self.addDockWidget(Qt.LeftDockWidgetArea, dock_widget)
 
-    def createCentralWidget(self):
+    def createNotePreview(self):
 
         self.tab_bar = QTabWidget(self)
 
@@ -89,6 +88,7 @@ class Notes(QMainWindow):
             res = search(self.search.text())
             for i, path in enumerate(res):
                 self.list.insertItem(i, path)
+
 
 App = QApplication(sys.argv)
 window = Notes()
