@@ -31,7 +31,16 @@ class Notes(QMainWindow):
         self.show()
 
     def createSearchWidget(self):
-        pass
+        dock_widget = QDockWidget()
+        dock_widget.setWindowTitle('example dock')
+        dock_widget.setAllowedAreas(Qt.AllDockWidgetAreas)
+
+        self.search = QLineEdit(self)
+        self.search.returnPressed.connect(self.doSearch)
+        self.search.setFixedHeight(50)
+        dock_widget.setWidget(self.search)
+
+        self.addDockWidget(Qt.LeftDockWidgetArea, dock_widget)
 
     def createCentralWidget(self):
 
@@ -78,15 +87,18 @@ class Notes(QMainWindow):
                                                         extensions=[GithubFlavoredMarkdownExtension()]))
 
     def doSearch(self):
-        pass
-        # self.list.clear()
-        # if self.search.text() == "":
-        #     for i, path in enumerate(build_file_list()):
-        #         self.list.insertItem(i, path)
-        # else:
-        #     res = search(self.search.text())
-        #     for i, path in enumerate(res):
-        #         self.list.insertItem(i, path)
+        self.list.clear()
+        if self.search.text() == "":
+            for i, path in enumerate(build_file_list()):
+                self.list.insertItem(i, path)
+        else:
+            res = search(self.search.text())
+            for i, path in enumerate(res):
+                self.list.insertItem(i, path)
+        # terms = self.search.text().split(":")
+        # tags = [t.strip('#') for t in terms if t.startswith('#')]
+        # print(tags)
+        # print(search)
 
 
 App = QApplication(sys.argv)
