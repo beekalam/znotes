@@ -39,7 +39,7 @@ def build_tags_list():
 
 
 # class ExampleWindow(QMainWindow):
-class ExampleWindow(QWidget):
+class NewNote(QWidget):
     def __init__(self):
         super().__init__()
         # QMainWindow.__init__(self)
@@ -113,7 +113,7 @@ class ExampleWindow(QWidget):
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    window = ExampleWindow()
+    window = NewNote()
 
     window.show()
     app.exec_()

@@ -12,7 +12,7 @@ import markdown
 from mdx_gfm import GithubFlavoredMarkdownExtension
 
 
-class Window(QWidget):
+class Notes(QWidget):
     def __init__(self):
         super().__init__()
         self.title = "PyQt5 QListWidget"
@@ -102,5 +102,5 @@ class Window(QWidget):
 
 
 App = QApplication(sys.argv)
-window = Window()
+window = Notes()
 sys.exit(App.exec())
