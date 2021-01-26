@@ -1,7 +1,7 @@
 import os
 
 from PyQt5 import QtGui
-from PyQt5.QtWidgets import QApplication, QWidget, QListWidget, QLabel, QVBoxLayout, QPlainTextEdit, QLineEdit, \
+from PyQt5.QtWidgets import QApplication, QWidget, QListWidget, QVBoxLayout, QPlainTextEdit, QLineEdit, \
     QHBoxLayout
 from PyQt5.QtWidgets import QTabWidget
 import sys
