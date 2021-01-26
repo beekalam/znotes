@@ -22,7 +22,6 @@ class Notes(QWidget):
         self.height = 300
         self.prev_note = None
         self.InitWindow()
-        self.createMenu()
 
     def createMenu(self):
         exit_act = QAction('Exit', self)
