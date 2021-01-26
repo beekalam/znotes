@@ -21,8 +21,7 @@ class Notes(QMainWindow):
         self.noteContent = QPlainTextEdit()
         self.tab_bar = QTabWidget(self)
         self.search = QLineEdit(self)
-        self.prev_note = None
-        self.current_note = None
+        self.current_note_path = None
         self.InitializeUI()
 
     def InitializeUI(self):
@@ -72,11 +71,12 @@ class Notes(QMainWindow):
     def listview_clicked(self):
         item = self.list.currentItem()
         if item is not None and item.text() is not None and os.path.isfile(item.text()):
-            if self.prev_note is not None and read_file_content(self.prev_note) != self.noteContent.toPlainText():
+            if self.current_note_path is not None and read_file_content(
+                    self.current_note_path) != self.noteContent.toPlainText():
                 print("writing new content....")
-                file_put_content(self.prev_note, self.noteContent.toPlainText())
-            self.prev_note = item.text()
-            self.statusBar().showMessage(self.prev_note)
+                file_put_content(self.current_note_path, self.noteContent.toPlainText())
+            self.current_note_path = item.text()
+            self.statusBar().showMessage(self.current_note_path)
             with open(item.text()) as f:
                 content = f.read()
                 self.noteContent.clear()
@@ -95,6 +95,7 @@ class Notes(QMainWindow):
                 self.list.insertItem(i, path)
 
 
-App = QApplication(sys.argv)
-window = Notes()
-sys.exit(App.exec())
+if __name__ == '__main__':
+    App = QApplication(sys.argv)
+    window = Notes()
+    sys.exit(App.exec())
