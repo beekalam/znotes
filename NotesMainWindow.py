@@ -24,10 +24,31 @@ class Notes(QMainWindow):
         self.setWindowTitle("Notes List")
 
         # set central widget for main window
-        self.setCentralWidget(QTabWidget())
+        self.createSearchWidget()
+        self.createCentralWidget()
         self.createDockWidget()
 
         self.show()
+
+    def createSearchWidget(self):
+        pass
+
+    def createCentralWidget(self):
+
+        self.tab_bar = QTabWidget(self)
+        # self.notes_content_tab = QWidget()
+        # self.notes_preview = QWidget()
+
+        self.noteContent = QPlainTextEdit()
+        self.tab_bar.addTab(self.noteContent, "note")
+        # self.noteContent.setFixedWidth(400)
+        # hbox.addWidget(self.noteContent)
+
+        self.web_view = QWebEngineView()
+        self.web_view.setHtml("")
+        # hbox.addWidget(self.web_view)
+        self.tab_bar.addTab(self.web_view, "preview")
+        self.setCentralWidget(self.tab_bar)
 
     def createDockWidget(self):
         dock_widget = QDockWidget()
@@ -55,6 +76,7 @@ class Notes(QMainWindow):
                 self.noteContent.setPlainText(content)
                 self.web_view.setHtml(markdown.markdown(content,
                                                         extensions=[GithubFlavoredMarkdownExtension()]))
+
     def doSearch(self):
         pass
         # self.list.clear()
