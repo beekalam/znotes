@@ -2,7 +2,7 @@ import os
 
 from PyQt5 import QtGui
 from PyQt5.QtWidgets import QApplication, QWidget, QListWidget, QVBoxLayout, QPlainTextEdit, QLineEdit, \
-    QHBoxLayout
+    QHBoxLayout, QAction
 from PyQt5.QtWidgets import QTabWidget
 import sys
 
@@ -22,6 +22,17 @@ class Notes(QWidget):
         self.height = 300
         self.prev_note = None
         self.InitWindow()
+        self.createMenu()
+
+    def createMenu(self):
+        exit_act = QAction('Exit', self)
+        exit_act.setShortcut('Ctr+Q')
+
+        menu_bar = self.menuBar()
+        menu_bar.setNativeMenuBar(False)
+
+        file_menu = menu_bar.addMenu('File')
+        file_menu.addAction(exit_act)
 
     def InitWindow(self):
         self.setWindowIcon(QtGui.QIcon("icon.png"))
