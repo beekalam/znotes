@@ -71,10 +71,7 @@ class Notes(QMainWindow):
     def listview_clicked(self):
         item = self.list.currentItem()
         if item is not None and item.text() is not None and os.path.isfile(item.text()):
-            if self.current_note_path is not None and read_file_content(
-                    self.current_note_path) != self.noteContent.toPlainText():
-                print("writing new content....")
-                file_put_content(self.current_note_path, self.noteContent.toPlainText())
+            self.update_current_note()
             self.current_note_path = item.text()
             self.statusBar().showMessage(self.current_note_path)
             with open(item.text()) as f:
@@ -83,6 +80,12 @@ class Notes(QMainWindow):
                 self.noteContent.setPlainText(content)
                 self.web_view.setHtml(markdown.markdown(content,
                                                         extensions=[GithubFlavoredMarkdownExtension()]))
+
+    def update_current_note(self):
+        if self.current_note_path is not None and read_file_content(
+                self.current_note_path) != self.noteContent.toPlainText():
+            print("writing new content....")
+            file_put_content(self.current_note_path, self.noteContent.toPlainText())
 
     def doSearch(self):
         self.list.clear()
