@@ -45,17 +45,12 @@ class Notes(QMainWindow):
     def createCentralWidget(self):
 
         self.tab_bar = QTabWidget(self)
-        # self.notes_content_tab = QWidget()
-        # self.notes_preview = QWidget()
 
         self.noteContent = QPlainTextEdit()
         self.tab_bar.addTab(self.noteContent, "note")
-        # self.noteContent.setFixedWidth(400)
-        # hbox.addWidget(self.noteContent)
 
         self.web_view = QWebEngineView()
         self.web_view.setHtml("")
-        # hbox.addWidget(self.web_view)
         self.tab_bar.addTab(self.web_view, "preview")
         self.setCentralWidget(self.tab_bar)
 
@@ -68,7 +63,6 @@ class Notes(QMainWindow):
         dock_widget.setWidget(self.list)
         for i, path in enumerate(build_file_list()):
             self.list.insertItem(i, path)
-        # self.list.clicked.connect(self.listview_clicked)
         self.list.currentRowChanged.connect(self.listview_clicked)
         self.addDockWidget(Qt.LeftDockWidgetArea, dock_widget)
 
@@ -95,11 +89,6 @@ class Notes(QMainWindow):
             res = search(self.search.text())
             for i, path in enumerate(res):
                 self.list.insertItem(i, path)
-        # terms = self.search.text().split(":")
-        # tags = [t.strip('#') for t in terms if t.startswith('#')]
-        # print(tags)
-        # print(search)
-
 
 App = QApplication(sys.argv)
 window = Notes()
