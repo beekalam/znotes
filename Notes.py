@@ -8,7 +8,7 @@ from PyQt5.QtCore import Qt
 import sys
 
 from NewNote import NewNote
-from utils import build_file_list, search, read_file_content, file_put_content
+from utils import build_file_list, search, read_file_content, file_put_content,  HIGHLIGHT_JS_PATH
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 import markdown
 from mdx_gfm import GithubFlavoredMarkdownExtension
@@ -21,13 +21,17 @@ from mdx_gfm import GithubFlavoredMarkdownExtension
 # </style>
 # """
 styles = ""
-
+highlightjs_js = read_file_content(os.path.join(HIGHLIGHT_JS_PATH, "highlight.min.js"))
+highlightjs_css = read_file_content(os.path.join(HIGHLIGHT_JS_PATH, "default.min.css"))
 
 
 def make_html_document(content):
-    highlight_js = """
-         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/default.min.css">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+    hljs = """
+        <style>{}</style>
+        <script>{}</script> 
+        """.format(highlightjs_css, highlightjs_js)
+
+    hljs = hljs + """
         <script>
             document.querySelectorAll('pre.highlight').forEach(block => {
               // then highlight each
@@ -35,6 +39,7 @@ def make_html_document(content):
             });
         </script>
     """
+
     return """
     <html>
     <head>
@@ -45,7 +50,7 @@ def make_html_document(content):
         {}
     </body>
     </html>
-    """.format(styles, content, highlight_js)
+    """.format(styles, content, hljs)
 
 
 class Notes(QMainWindow):

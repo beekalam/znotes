@@ -1,6 +1,7 @@
 import os
 
 NOTES_PATH = "/home/moh/Documents/notes/zettle_notes"
+HIGHLIGHT_JS_PATH = os.path.join(os.path.dirname(__file__), "highlight.js")
 
 
 def read_tags(path):
@@ -82,6 +83,3 @@ def read_file_content(path):
 def file_put_content(path, content):
     with open(path, 'w') as f:
         f.write(content)
-
-
-search("#python:it:i:s:m:")
