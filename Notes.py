@@ -68,11 +68,19 @@ class Notes(QMainWindow):
         self.save_act.triggered.connect(self.update_current_note)
         file_menu.addAction(self.save_act)
 
+        self.find_act = QAction('Find', self)
+        self.find_act.setShortcut('Ctrl+F')
+        self.find_act.triggered.connect(self.focus_search)
+        file_menu.addAction(self.find_act)
+
         self.exit_act = QAction('Exit', self)
         self.exit_act.setShortcut('Ctrl+Q')
         self.exit_act.setStatusTip('Quit program')
         self.exit_act.triggered.connect(self.close)
         file_menu.addAction(self.exit_act)
+
+    def focus_search(self):
+        self.search.setFocus()
 
     def createStatusBar(self):
         self.setStatusBar(QStatusBar(self))
