@@ -43,6 +43,8 @@ class Notes(QMainWindow):
         self.createMenu()
         self.createStatusBar()
 
+        self.setTabOrder(self.search,self.list)
+
         self.show()
 
     def create_new_note(self):
