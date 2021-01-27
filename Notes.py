@@ -13,6 +13,14 @@ from PyQt5.QtWebEngineWidgets import QWebEngineView
 import markdown
 from mdx_gfm import GithubFlavoredMarkdownExtension
 
+styles = """
+<style>
+.highlight{
+    background-color:wheat;
+}
+</style>
+"""
+
 
 class Notes(QMainWindow):
     def __init__(self):
@@ -113,7 +121,7 @@ class Notes(QMainWindow):
 
     def update_note_markdown_preview(self, content):
         markdown_content = markdown.markdown(content, extensions=[GithubFlavoredMarkdownExtension()])
-        self.web_view.setHtml(markdown_content)
+        self.web_view.setHtml(styles + markdown_content)
 
     def update_current_note(self):
         if self.current_note_path is not None and read_file_content(
