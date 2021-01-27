@@ -109,14 +109,18 @@ class Notes(QMainWindow):
                 content = f.read()
                 self.noteContent.clear()
                 self.noteContent.setPlainText(content)
-                markdown_content = markdown.markdown(content, extensions=[GithubFlavoredMarkdownExtension()])
-                self.web_view.setHtml(markdown_content)
+                self.update_note_markdown_preview(content)
+
+    def update_note_markdown_preview(self, content):
+        markdown_content = markdown.markdown(content, extensions=[GithubFlavoredMarkdownExtension()])
+        self.web_view.setHtml(markdown_content)
 
     def update_current_note(self):
         if self.current_note_path is not None and read_file_content(
                 self.current_note_path) != self.noteContent.toPlainText():
             print("writing new content....")
             file_put_content(self.current_note_path, self.noteContent.toPlainText())
+            self.update_note_markdown_preview(self.noteContent.toPlainText())
 
     def doSearch(self):
         self.list.clear()
