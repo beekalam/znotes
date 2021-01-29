@@ -60,14 +60,12 @@ class NewNote(QMainWindow):
         tags = ' '.join(['#' + t.strip() for t in tag.split()])
         tags = "tags= {} {}".format(tags, os.linesep + os.linesep)
         content = "{} {}".format(content, os.linesep)
-        print(path, tags, content)
         with open(path, 'w') as f:
             f.writelines([title, tags, content])
 
     # Get the system clipboard contents
     def clipboardChanged(self):
         text = QApplication.clipboard().text()
-        print(text)
         self.b.insertPlainText(text + '\n')
 
 

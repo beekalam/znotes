@@ -7,50 +7,12 @@ from PyQt5.QtWidgets import QTabWidget
 from PyQt5.QtCore import Qt
 import sys
 
+from HtmlDocument import HtmlDocument
 from NewNote import NewNote
-from utils import build_file_list, search, read_file_content, file_put_content,  HIGHLIGHT_JS_PATH
+from utils import build_file_list, search, read_file_content, file_put_content, HIGHLIGHT_JS_PATH
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 import markdown
 from mdx_gfm import GithubFlavoredMarkdownExtension
-
-# styles = """
-# <style>
-# .highlight{
-#     background-color:wheat;
-# }
-# </style>
-# """
-styles = ""
-highlightjs_js = read_file_content(os.path.join(HIGHLIGHT_JS_PATH, "highlight.min.js"))
-highlightjs_css = read_file_content(os.path.join(HIGHLIGHT_JS_PATH, "default.min.css"))
-
-
-def make_html_document(content):
-    hljs = """
-        <style>{}</style>
-        <script>{}</script> 
-        """.format(highlightjs_css, highlightjs_js)
-
-    hljs = hljs + """
-        <script>
-            document.querySelectorAll('pre.highlight').forEach(block => {
-              // then highlight each
-              hljs.highlightBlock(block);
-            });
-        </script>
-    """
-
-    return """
-    <html>
-    <head>
-        {}
-    </head>
-    <body>
-        {}
-        {}
-    </body>
-    </html>
-    """.format(styles, content, hljs)
 
 
 class Notes(QMainWindow):
@@ -162,7 +124,7 @@ class Notes(QMainWindow):
 
     def update_note_markdown_preview(self, content):
         markdown_content = markdown.markdown(content, extensions=[GithubFlavoredMarkdownExtension()])
-        self.web_view.setHtml(make_html_document(markdown_content))
+        self.web_view.setHtml(HtmlDocument().make(markdown_content))
 
     def update_current_note(self):
         if self.current_note_path is not None and read_file_content(
