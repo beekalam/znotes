@@ -11,25 +11,6 @@ from PyQt5.QtCore import QAbstractNativeEventFilter, QAbstractEventDispatcher
 NOTES_PATH = "/home/moh/Documents/notes/zettle_notes"
 
 
-def build_tags_list():
-    def read_tags(path):
-        lines = open(path, 'r').read().split("\n")
-        res = list(filter(lambda x: x.startswith("tags"), lines))
-        if res:
-            res = res[0].replace("tags = ", "").replace("#", "").split()
-        return res
-
-    tags = []
-    for root, dirs, files in os.walk(NOTES_PATH):
-        for file in files:
-            if file.endswith(".md"):
-                path = os.path.join(root, file)
-                tags.extend(read_tags(path))
-    ans = list(set(tags))
-    return ans
-
-
-# class ExampleWindow(QMainWindow):
 class NewNote(QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)

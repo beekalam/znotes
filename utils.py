@@ -83,3 +83,21 @@ def read_file_content(path):
 def file_put_content(path, content):
     with open(path, 'w') as f:
         f.write(content)
+
+
+def build_tags_list():
+    def read_tags(path):
+        lines = open(path, 'r').read().split("\n")
+        res = list(filter(lambda x: x.startswith("tags"), lines))
+        if res:
+            res = res[0].replace("tags = ", "").replace("#", "").split()
+        return res
+
+    tags = []
+    for root, dirs, files in os.walk(NOTES_PATH):
+        for file in files:
+            if file.endswith(".md"):
+                path = os.path.join(root, file)
+                tags.extend(read_tags(path))
+    ans = list(set(tags))
+    return ans
