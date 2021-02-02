@@ -6,6 +6,7 @@ from utils import read_file_content, HIGHLIGHT_JS_PATH
 class HtmlDocument:
     def __init__(self, styles="") -> None:
 
+
         self.highlightjs_js = read_file_content(os.path.join(HIGHLIGHT_JS_PATH, "highlight.min.js"))
         self.highlightjs_css = read_file_content(os.path.join(HIGHLIGHT_JS_PATH, "default.min.css"))
         self.styles = styles
