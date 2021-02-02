@@ -13,15 +13,6 @@ class HtmlDocumentTest(unittest.TestCase):
         content = "This is my test content"
         self.assertTrue(content in htmlDocument.make(content))
 
-    def test_html_content_can_accept_styles(self):
-        styles = """
-            .header{
-                background-color:green
-            }
-        """
-        htmlDocument = HtmlDocument(styles=styles)
-        self.assertTrue(styles in htmlDocument.make("<style>{}</style>".format(styles)))
-
     def test_can_add_inline_js_content(self):
         js = "var a = 12;"
         htmlDocument = HtmlDocument()

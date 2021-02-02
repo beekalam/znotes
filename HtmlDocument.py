@@ -21,12 +21,9 @@ class HtmlDocument:
         hljs = ""
 
         self.addJS("""
-            <script>
                 document.querySelectorAll('pre.highlight').forEach(block => {
-                  // then highlight each
                   hljs.highlightBlock(block);
                 });
-            </script>
         """)
 
         for css in self.cssContent:
