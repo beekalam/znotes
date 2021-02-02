@@ -7,7 +7,7 @@ from PyQt5.QtWidgets import QTabWidget
 from PyQt5.QtCore import Qt
 import sys
 
-from HtmlDocument import HtmlDocument
+from HightlightJSHtmlDocument import HighlightJSHtmlDocument
 from NewNote import NewNote
 from utils import build_file_list, search, read_file_content, file_put_content, HIGHLIGHT_JS_PATH
 from PyQt5.QtWebEngineWidgets import QWebEngineView
@@ -23,7 +23,7 @@ class Notes(QMainWindow):
         self.noteContent = QPlainTextEdit()
         self.tab_bar = QTabWidget(self)
         self.search = QLineEdit(self)
-        self.htmlDocument = HtmlDocument()
+        self.htmlDocument = HighlightJSHtmlDocument()
         self.current_note_path = None
         self.InitializeUI()
 
