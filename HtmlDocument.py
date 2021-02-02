@@ -4,12 +4,11 @@ from utils import read_file_content, HIGHLIGHT_JS_PATH
 
 
 class HtmlDocument:
-    def __init__(self, styles="") -> None:
+    def __init__(self) -> None:
         self.jsContent = []
         self.cssContent = []
-        self.addJS(read_file_content(os.path.join(HIGHLIGHT_JS_PATH, "highlight.min.js")))
         self.addCSS(read_file_content(os.path.join(HIGHLIGHT_JS_PATH, "default.min.css")))
-        self.styles = styles
+        self.addJS(read_file_content(os.path.join(HIGHLIGHT_JS_PATH, "highlight.min.js")))
 
     def addJS(self, js):
         self.jsContent.append(js)
@@ -18,7 +17,6 @@ class HtmlDocument:
         self.cssContent.append(style)
 
     def make(self, content):
-        hljs = ""
 
         self.addJS("""
                 document.querySelectorAll('pre.highlight').forEach(block => {
@@ -26,13 +24,15 @@ class HtmlDocument:
                 });
         """)
 
+        css_content = ""
         for css in self.cssContent:
-            hljs += "<style>{}</style>".format(css)
+            css_content = css_content + "<style>{}</style>".format(css)
 
+        js_content = ""
         for js in self.jsContent:
-            hljs += "<script>{}</script>".format(js)
+            js_content = js_content + "<script>{}</script>".format(js)
 
-        return """
+        html = """
         <html>
         <head>
             {}
@@ -42,4 +42,5 @@ class HtmlDocument:
             {}
         </body>
         </html>
-        """.format(self.styles, content, hljs)
+        """.format(css_content, content, js_content)
+        return html
