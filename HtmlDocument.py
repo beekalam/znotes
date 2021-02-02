@@ -5,17 +5,30 @@ from utils import read_file_content, HIGHLIGHT_JS_PATH
 
 class HtmlDocument:
     def __init__(self, styles="") -> None:
-
-
-        self.highlightjs_js = read_file_content(os.path.join(HIGHLIGHT_JS_PATH, "highlight.min.js"))
+        self.jsContent = []
+        self.cssContent = []
+        # self.highlightjs_js = read_file_content(os.path.join(HIGHLIGHT_JS_PATH, "highlight.min.js"))
+        self.addJS(read_file_content(os.path.join(HIGHLIGHT_JS_PATH, "highlight.min.js")))
         self.highlightjs_css = read_file_content(os.path.join(HIGHLIGHT_JS_PATH, "default.min.css"))
         self.styles = styles
+
+    def addJS(self, js):
+        self.jsContent.append(js)
+
+    def addCSS(self, style):
+        self.cssContent.append(style)
 
     def make(self, content):
         hljs = """
             <style>{}</style>
-            <script>{}</script> 
-            """.format(self.highlightjs_css, self.highlightjs_js)
+            """.format(self.highlightjs_css)
+
+
+        for css in self.cssContent:
+            hljs += "<style>{}</style>".format(css)
+
+        for js in self.jsContent:
+            hljs += "<script>{}</script>".format(js)
 
         hljs = hljs + """
             <script>

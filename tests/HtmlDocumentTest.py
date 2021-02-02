@@ -21,3 +21,15 @@ class HtmlDocumentTest(unittest.TestCase):
         """
         htmlDocument = HtmlDocument(styles=styles)
         self.assertTrue(styles in htmlDocument.make("<style>{}</style>".format(styles)))
+
+    def test_can_add_inline_js_content(self):
+        js = "var a = 12;"
+        htmlDocument = HtmlDocument()
+        htmlDocument.addJS(js)
+        self.assertTrue(js in htmlDocument.make(""))
+
+    def test_can_add_css_content(self):
+        style = ".header{background-color:green}"
+        htmlDocument = HtmlDocument()
+        htmlDocument.addCSS(style)
+        self.assertTrue(style in htmlDocument.make(""))
