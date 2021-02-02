@@ -83,7 +83,7 @@ class Notes(QMainWindow):
 
     def createSearchWidget(self):
         dock_widget = QDockWidget()
-        dock_widget.setWindowTitle('example dock')
+        dock_widget.setWindowTitle('Search')
         dock_widget.setAllowedAreas(Qt.AllDockWidgetAreas)
 
         self.search.returnPressed.connect(self.doSearch)
@@ -102,7 +102,7 @@ class Notes(QMainWindow):
 
     def createNoteList(self):
         dock_widget = QDockWidget()
-        dock_widget.setWindowTitle('example dock')
+        dock_widget.setWindowTitle('Notes')
         dock_widget.setAllowedAreas(Qt.AllDockWidgetAreas)
 
         dock_widget.setWidget(self.list)
