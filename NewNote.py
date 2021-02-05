@@ -1,12 +1,13 @@
-import sys
 import os
-from PyQt5.Qt import QApplication, QClipboard
-from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtWidgets import QMainWindow, QWidget, QPlainTextEdit, QComboBox, QLineEdit, QPushButton, QVBoxLayout
-from PyQt5.QtCore import QSize
+import sys
 from datetime import datetime
 
-from PyQt5.QtCore import QAbstractNativeEventFilter, QAbstractEventDispatcher
+from PyQt5 import QtWidgets
+from PyQt5.Qt import QApplication
+from PyQt5.QtCore import QSize
+from PyQt5.QtWidgets import QMainWindow, QWidget, QPlainTextEdit, QLineEdit, QPushButton, QVBoxLayout
+
+from utils import save_note
 
 NOTES_PATH = "/home/moh/Documents/notes/zettle_notes"
 
@@ -56,12 +57,7 @@ class NewNote(QMainWindow):
     def save(self, title, content, tag):
         filename = "{} {}.md".format(datetime.now().strftime("%Y%m%d%H%M"), title)
         path = os.path.join(NOTES_PATH, filename)
-        title = "# {} {}".format(title, os.linesep + os.linesep)
-        tags = ' '.join(['#' + t.strip() for t in tag.split()])
-        tags = "tags= {} {}".format(tags, os.linesep + os.linesep)
-        content = "{} {}".format(content, os.linesep)
-        with open(path, 'w') as f:
-            f.writelines([title, tags, content])
+        save_note(title, content, tag, path)
 
     # Get the system clipboard contents
     def clipboardChanged(self):

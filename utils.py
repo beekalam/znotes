@@ -33,6 +33,15 @@ def build_file_list():
     return files_list
 
 
+def save_note(title, content, tag, path):
+    title = "# {} {}".format(title, os.linesep + os.linesep)
+    tags = ' '.join(['#' + t.strip() for t in tag.split()])
+    tags = "tags= {} {}".format(tags, os.linesep + os.linesep)
+    content = "{} {}".format(content, os.linesep)
+    with open(path, 'w') as f:
+        f.writelines([title, tags, content])
+
+
 def search_file_content_old(path, query):
     with open(path) as f:
         content = f.read()
