@@ -1,18 +1,18 @@
 import os
-
-from PyQt5 import QtGui, Qt
-from PyQt5.QtWidgets import QApplication, QWidget, QListWidget, QVBoxLayout, QPlainTextEdit, QLineEdit, \
-    QHBoxLayout, QAction, QMainWindow, QDockWidget, QTextEdit, QStatusBar
-from PyQt5.QtWidgets import QTabWidget
-from PyQt5.QtCore import Qt
 import sys
+
+import markdown
+from PyQt5 import QtGui, Qt
+from PyQt5.QtCore import Qt
+from PyQt5.QtWebEngineWidgets import QWebEngineView
+from PyQt5.QtWidgets import QApplication, QListWidget, QVBoxLayout, QPlainTextEdit, QLineEdit, \
+    QAction, QMainWindow, QDockWidget, QStatusBar, QWidget, QHBoxLayout, QToolBar
+from PyQt5.QtWidgets import QTabWidget
+from mdx_gfm import GithubFlavoredMarkdownExtension
 
 from HightlightJSHtmlDocument import HighlightJSHtmlDocument
 from NewNote import NewNote
-from utils import build_file_list, search, read_file_content, file_put_content, HIGHLIGHT_JS_PATH
-from PyQt5.QtWebEngineWidgets import QWebEngineView
-import markdown
-from mdx_gfm import GithubFlavoredMarkdownExtension
+from utils import build_file_list, search, read_file_content, file_put_content
 
 
 class Notes(QMainWindow):
@@ -95,9 +95,24 @@ class Notes(QMainWindow):
     def createNotePreview(self):
 
         self.tab_bar.addTab(self.noteContent, "note")
-
         self.web_view.setHtml("")
-        self.tab_bar.addTab(self.web_view, "preview")
+
+        tab_content_widget = QWidget()
+        vbox = QVBoxLayout()
+
+        tool_bar = QToolBar("Addressbar")
+
+        address_line = QLineEdit()
+        address_line.setText("Preview")
+        tool_bar.addWidget(address_line)
+        vbox.addWidget(tool_bar)
+
+        vbox.addWidget(self.web_view)
+
+        tab_content_widget.setLayout(vbox)
+        self.tab_bar.addTab(tab_content_widget, "preview")
+
+        # self.tab_bar.addTab(self.web_view, "preview")
         self.setCentralWidget(self.tab_bar)
 
     def createNoteList(self):
