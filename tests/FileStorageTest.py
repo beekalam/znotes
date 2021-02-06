@@ -3,7 +3,7 @@ import unittest
 from datetime import datetime
 
 from FileStorage import FileStorage
-from utils import file_put_content, file_exists
+from utils import file_put_content, file_exists, read_file_content
 
 
 class FileStorageTest(unittest.TestCase):
@@ -73,7 +73,16 @@ fclose($fptr);
         title = "this is my note title"
         self.fs.addNote(title, "this my note content")
 
-        # expected_note_name = "# {} {}".format(title, os.linesep + os.linesep)
         file_name = "{} {}.md".format(datetime.now().strftime("%Y%m%d%H%M"), title)
         expected_note_file_path = os.path.join(self.notes_path, file_name)
         self.assertTrue(file_exists(expected_note_file_path))
+
+    def test_it_should_add_corrent_title_to_file(self):
+        title = "this is my note title"
+        self.fs.addNote(title, "this my note content")
+
+        file_name = "{} {}.md".format(datetime.now().strftime("%Y%m%d%H%M"), title)
+        file_path = os.path.join(self.notes_path, file_name)
+        file_content = read_file_content(file_path)
+        expected_title = "# {}".format(title)
+        self.assertTrue(expected_title in file_content)
