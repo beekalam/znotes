@@ -108,3 +108,7 @@ def build_tags_list():
                 tags.extend(read_tags(path))
     ans = list(set(tags))
     return ans
+
+
+def file_exists(path):
+    return os.path.isfile(path)

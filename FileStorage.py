@@ -1,4 +1,5 @@
 import os
+from datetime import datetime
 
 
 class FileStorage:
@@ -13,8 +14,13 @@ class FileStorage:
                 self.notes[file] = ""
         return self.notes
 
-    def addNote(self, content):
-        pass
+    def addNote(self, title, content):
+        filename = "{} {}.md".format(datetime.now().strftime("%Y%m%d%H%M"), title)
+        file_path = os.path.join(self.notes_path, filename)
+        title = "# {} {}".format(title, os.linesep + os.linesep)
+        content = "{} {}".format(content, os.linesep)
+        with open(file_path, 'w') as f:
+            f.writelines([title, content])
 
     def removeNote(self, note_id):
         pass

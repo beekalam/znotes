@@ -1,17 +1,18 @@
 import os
 import unittest
+from datetime import datetime
 
 from FileStorage import FileStorage
-from utils import file_put_content
+from utils import file_put_content, file_exists
 
 
 class FileStorageTest(unittest.TestCase):
 
     def setUp(self) -> None:
         super().setUp()
-        notes_path = os.path.join(os.getcwd(), "notes_stubs")
+        self.notes_path = os.path.join(os.getcwd(), "notes_stubs")
         # clean test stubs
-        for root, dirs, files in os.walk(notes_path):
+        for root, dirs, files in os.walk(self.notes_path):
             for file in files:
                 os.remove(os.path.join(root, file))
 
@@ -52,9 +53,18 @@ fclose($fptr);
 """
 
         for name, content in self.notes.items():
-            file_put_content(os.path.join(notes_path, name), content)
-        self.fs = FileStorage(notes_path)
+            file_put_content(os.path.join(self.notes_path, name), content)
+        self.fs = FileStorage(self.notes_path)
 
     def test_it_can_pull_all_notes(self):
         for k, _ in self.notes.items():
             self.assertTrue(k in self.fs.all().keys())
+
+    def test_it_can_add_note(self):
+        title = "this is my note title"
+        self.fs.addNote(title, "this my note content")
+
+        # expected_note_name = "# {} {}".format(title, os.linesep + os.linesep)
+        file_name = "{} {}.md".format(datetime.now().strftime("%Y%m%d%H%M"), title)
+        expected_note_file_path = os.path.join(self.notes_path, file_name)
+        self.assertTrue(file_exists(expected_note_file_path))
