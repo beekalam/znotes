@@ -8,14 +8,19 @@ from utils import file_put_content, file_exists
 
 class FileStorageTest(unittest.TestCase):
 
-    def setUp(self) -> None:
-        super().setUp()
+    def __init__(self, methodName: str = ...) -> None:
+        super().__init__(methodName)
         self.notes_path = os.path.join(os.getcwd(), "notes_stubs")
+
+    def _clean_stub_files(self):
         # clean test stubs
         for root, dirs, files in os.walk(self.notes_path):
             for file in files:
                 os.remove(os.path.join(root, file))
 
+    def setUp(self) -> None:
+        super().setUp()
+        self._clean_stub_files()
         # create test notes
         self.notes = {}
         self.notes["202006151711 online coding tools.md"] = """
@@ -55,6 +60,10 @@ fclose($fptr);
         for name, content in self.notes.items():
             file_put_content(os.path.join(self.notes_path, name), content)
         self.fs = FileStorage(self.notes_path)
+
+    def tearDown(self) -> None:
+        super().tearDown()
+        self._clean_stub_files()
 
     def test_it_can_pull_all_notes(self):
         for k, _ in self.notes.items():
