@@ -89,3 +89,14 @@ fclose($fptr);
         self.assertTrue(expected_title in file_content)
         self.assertTrue(content in file_content)
         self.assertTrue(file_name in self.fs.all().keys())
+
+    def test_it_should_add_tags_when_adding_new_note(self):
+        title = "this is my note title"
+        content = "this is my content"
+        self.fs.addNote(title, content, "math geography history")
+
+        file_name = "{} {}.md".format(datetime.now().strftime("%Y%m%d%H%M"), title)
+        file_path = os.path.join(self.notes_path, file_name)
+        file_content = read_file_content(file_path)
+        file_tags = "tags= #math #geography #history"
+        self.assertTrue(file_tags in file_content)
