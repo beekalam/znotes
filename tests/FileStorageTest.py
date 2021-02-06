@@ -77,7 +77,7 @@ fclose($fptr);
         expected_note_file_path = os.path.join(self.notes_path, file_name)
         self.assertTrue(file_exists(expected_note_file_path))
 
-    def test_it_should_add_corrent_title_to_file(self):
+    def test_it_should_add_correct_title_to_file(self):
         title = "this is my note title"
         content = "this is my content"
         self.fs.addNote(title, content)
@@ -88,3 +88,4 @@ fclose($fptr);
         expected_title = "# {}".format(title)
         self.assertTrue(expected_title in file_content)
         self.assertTrue(content in file_content)
+        self.assertTrue(file_name in self.fs.all().keys())
