@@ -5,7 +5,7 @@ from utils import read_file_content
 
 
 class FileStorage:
-    def __init__(self, notes_path) -> None:
+    def __init__(self, notes_path: str) -> None:
         super().__init__()
         self.notes_path = notes_path
         self.notes = {}
@@ -45,6 +45,7 @@ class FileStorage:
     def getNote(self, note_id):
         if note_id in self.notes.keys():
             return read_file_content(self.notes[note_id])
+
 
     def searchNotes(self, query):
         pass
