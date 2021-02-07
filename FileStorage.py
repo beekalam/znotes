@@ -15,21 +15,21 @@ class FileStorage:
         return self.notes
 
     def addNote(self, title: str, content: str, tags: str) -> None:
-        with open(self._buildFileName(title), 'w') as f:
+        with open(self._buildFilePath(title), 'w') as f:
             f.writelines([
-                self._buildTitle(title),
+                self._buildTitleLine(title),
                 self._buildTagsLine(tags),
-                self._buildContentLine(content)
+                self._buildContent(content)
             ])
 
-    def _buildFileName(self, title: str) -> str:
+    def _buildFilePath(self, title: str) -> str:
         filename = "{} {}.md".format(datetime.now().strftime("%Y%m%d%H%M"), title)
         return os.path.join(self.notes_path, filename)
 
-    def _buildTitle(self, title: str) -> str:
+    def _buildTitleLine(self, title: str) -> str:
         return "# {} {}".format(title, os.linesep + os.linesep)
 
-    def _buildContentLine(self, content: str) -> str:
+    def _buildContent(self, content: str) -> str:
         return "{} {}".format(content, os.linesep)
 
     def _buildTagsLine(self, tags: str) -> str:
