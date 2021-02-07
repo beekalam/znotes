@@ -14,15 +14,19 @@ class FileStorage:
                 self.notes[file] = os.path.join(root, file)
         return self.notes
 
-    def addNote(self, title, content, tags):
-        filename = "{} {}.md".format(datetime.now().strftime("%Y%m%d%H%M"), title)
-        file_path = os.path.join(self.notes_path, filename)
-        title = "# {} {}".format(title, os.linesep + os.linesep)
+    def addNote(self, title: str, content: str, tags: str) -> None:
         content = "{} {}".format(content, os.linesep)
         tags = ' '.join(['#' + t.strip() for t in tags.split()])
         tags = "tags= {} {}".format(tags, os.linesep + os.linesep)
-        with open(file_path, 'w') as f:
-            f.writelines([title, tags, content])
+        with open(self._buildFileName(title), 'w') as f:
+            f.writelines([self._buildTitle(title), tags, content])
+
+    def _buildFileName(self, title: str) -> str:
+        filename = "{} {}.md".format(datetime.now().strftime("%Y%m%d%H%M"), title)
+        return os.path.join(self.notes_path, filename)
+
+    def _buildTitle(self, title: str) -> str:
+        return "# {} {}".format(title, os.linesep + os.linesep)
 
     def removeNote(self, note_id):
         pass

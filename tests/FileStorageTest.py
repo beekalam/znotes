@@ -71,7 +71,8 @@ fclose($fptr);
 
     def test_it_can_add_note(self):
         title = "this is my note title"
-        self.fs.addNote(title, "this my note content")
+        tags = "math geography"
+        self.fs.addNote(title, "this my note content", tags)
 
         file_name = "{} {}.md".format(datetime.now().strftime("%Y%m%d%H%M"), title)
         expected_note_file_path = os.path.join(self.notes_path, file_name)
@@ -80,7 +81,8 @@ fclose($fptr);
     def test_it_should_add_correct_title_to_file(self):
         title = "this is my note title"
         content = "this is my content"
-        self.fs.addNote(title, content)
+        tags = "math geography"
+        self.fs.addNote(title, content, tags)
 
         file_name = "{} {}.md".format(datetime.now().strftime("%Y%m%d%H%M"), title)
         file_path = os.path.join(self.notes_path, file_name)
@@ -93,7 +95,8 @@ fclose($fptr);
     def test_it_should_add_tags_when_adding_new_note(self):
         title = "this is my note title"
         content = "this is my content"
-        self.fs.addNote(title, content, "math geography history")
+        tags = "math geography history"
+        self.fs.addNote(title, content, tags)
 
         file_name = "{} {}.md".format(datetime.now().strftime("%Y%m%d%H%M"), title)
         file_path = os.path.join(self.notes_path, file_name)
