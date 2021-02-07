@@ -1,12 +1,15 @@
 import os
 from datetime import datetime
 
+from utils import read_file_content
+
 
 class FileStorage:
     def __init__(self, notes_path) -> None:
         super().__init__()
         self.notes_path = notes_path
         self.notes = {}
+        self.all()
 
     def all(self):
         for root, dirs, files in os.walk(self.notes_path):
@@ -40,7 +43,8 @@ class FileStorage:
         pass
 
     def getNote(self, note_id):
-        pass
+        if note_id in self.notes.keys():
+            return read_file_content(self.notes[note_id])
 
     def searchNotes(self, query):
         pass

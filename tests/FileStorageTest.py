@@ -103,3 +103,8 @@ fclose($fptr);
         file_content = read_file_content(file_path)
         file_tags = "tags= #math #geography #history"
         self.assertTrue(file_tags in file_content)
+
+    def test_it_can_get_note_text_content(self):
+        for k in self.notes.keys():
+            note_path = os.path.join(self.notes_path, k)
+            self.assertEqual(self.fs.getNote(k), read_file_content(note_path))
