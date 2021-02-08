@@ -12,7 +12,6 @@ from mdx_gfm import GithubFlavoredMarkdownExtension
 from FileStorage import FileStorage
 from HightlightJSHtmlDocument import HighlightJSHtmlDocument
 from NewNote import NewNote, NOTES_PATH
-from utils import build_file_list, search
 
 
 class Notes(QMainWindow):
@@ -163,11 +162,14 @@ class Notes(QMainWindow):
     def doSearch(self):
         self.list.clear()
         if self.search.text() == "":
-            for i, path in enumerate(build_file_list()):
+            for i, path in enumerate(self.fs.all().keys()):
                 self.list.insertItem(i, path)
+            # for i, path in enumerate(build_file_list()):
+            #     self.list.insertItem(i, path)
         else:
-            res = search(self.search.text())
-            for i, path in enumerate(res):
+            # res = search(self.search.text())
+            self.fs.searchNotes(self.search.text())
+            for i, path in enumerate(self.fs.getNotes()):
                 self.list.insertItem(i, path)
 
 
