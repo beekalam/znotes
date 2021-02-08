@@ -108,3 +108,6 @@ fclose($fptr);
         for k in self.notes.keys():
             note_path = os.path.join(self.notes_path, k)
             self.assertEqual(self.fs.getNote(k), read_file_content(note_path))
+
+    def test_it_can_search_notes(self):
+        self.assertEqual(1, len(self.fs.searchNotes("#php")))

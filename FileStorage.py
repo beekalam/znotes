@@ -46,6 +46,12 @@ class FileStorage:
         if note_id in self.notes.keys():
             return read_file_content(self.notes[note_id])
 
-
     def searchNotes(self, query):
-        pass
+        for _, path in self.notes.items():
+            lines = read_file_content(path).split("\n")
+            res = list(filter(lambda x: x.startswith("tags"), lines))
+            if res:
+                res = res[0].replace("tags = ", "").replace("#", "").split()
+            print(res)
+            return res
+        return []
