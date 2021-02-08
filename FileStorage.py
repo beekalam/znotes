@@ -42,8 +42,11 @@ class FileStorage:
     def removeNote(self, note_id):
         pass
 
+    def _hasNote(self, note_id):
+        return note_id in self.notes.keys()
+
     def getNote(self, note_id):
-        if note_id in self.notes.keys():
+        if self._hasNote(note_id):
             return read_file_content(self.notes[note_id])
 
     def searchNotes(self, query):
@@ -56,6 +59,10 @@ class FileStorage:
             return res
         return []
 
+    def _noteChanged(self, note_id, new_content):
+        return self._hasNote(note_id) and self.getNote(note_id) != new_content
+
     def updateNote(self, note_id, new_content):
-        if note_id in self.notes.keys():
+        if self._noteChanged(note_id, new_content):
+            print("writing new content....")
             file_put_content(self.notes[note_id], new_content)

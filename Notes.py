@@ -1,4 +1,3 @@
-import os
 import sys
 
 import markdown
@@ -10,9 +9,10 @@ from PyQt5.QtWidgets import QApplication, QListWidget, QVBoxLayout, QPlainTextEd
 from PyQt5.QtWidgets import QTabWidget
 from mdx_gfm import GithubFlavoredMarkdownExtension
 
+from FileStorage import FileStorage
 from HightlightJSHtmlDocument import HighlightJSHtmlDocument
-from NewNote import NewNote
-from utils import build_file_list, search, read_file_content, file_put_content
+from NewNote import NewNote, NOTES_PATH
+from utils import build_file_list, search
 
 
 class Notes(QMainWindow):
@@ -25,6 +25,7 @@ class Notes(QMainWindow):
         self.search = QLineEdit(self)
         self.htmlDocument = HighlightJSHtmlDocument()
         self.current_note_path = None
+        self.fs = FileStorage(NOTES_PATH)
         self.InitializeUI()
 
     def InitializeUI(self):
@@ -121,32 +122,42 @@ class Notes(QMainWindow):
         dock_widget.setAllowedAreas(Qt.AllDockWidgetAreas)
 
         dock_widget.setWidget(self.list)
-        for i, path in enumerate(build_file_list()):
+        # for i, path in enumerate(build_file_list()):
+        #     self.list.insertItem(i, path)
+        for i, path in enumerate(self.fs.all().keys()):
             self.list.insertItem(i, path)
         self.list.currentRowChanged.connect(self.listview_clicked)
         self.addDockWidget(Qt.LeftDockWidgetArea, dock_widget)
 
     def listview_clicked(self):
         item = self.list.currentItem()
-        if item is not None and item.text() is not None and os.path.isfile(item.text()):
+        if item is not None and item.text() is not None:  # and os.path.isfile(item.text()):
             self.update_current_note()
             self.current_note_path = item.text()
             self.statusBar().showMessage(self.current_note_path)
-            with open(item.text()) as f:
-                content = f.read()
-                self.noteContent.clear()
-                self.noteContent.setPlainText(content)
-                self.update_note_markdown_preview(content)
+
+            content = self.fs.getNote(self.current_note_path)
+            self.noteContent.setPlainText(content)
+            self.update_note_markdown_preview(content)
+            # with open(item.text()) as f:
+            # content = f.read()
+            # self.noteContent.clear()
+            # self.noteContent.setPlainText(content)
+            # self.update_note_markdown_preview(content)
 
     def update_note_markdown_preview(self, content):
         markdown_content = markdown.markdown(content, extensions=[GithubFlavoredMarkdownExtension()])
         self.web_view.setHtml(self.htmlDocument.make(markdown_content))
 
+    def get_current_note_file_name(self):
+        if self.current_note_path is not None:
+            return self.current_note_path.split("/")[-1]
+
     def update_current_note(self):
-        if self.current_note_path is not None and read_file_content(
-                self.current_note_path) != self.noteContent.toPlainText():
-            print("writing new content....")
-            file_put_content(self.current_note_path, self.noteContent.toPlainText())
+        if self.current_note_path is not None:  # and read_file_content(self.current_note_path) != self.noteContent.toPlainText():
+            self.fs.updateNote(self.current_note_path, self.noteContent.toPlainText())
+            # self.fs.updateNote(self.get_current_note_file_name(), self.noteContent.toPlainText())
+            # file_put_content(self.current_note_path, self.noteContent.toPlainText())
             self.update_note_markdown_preview(self.noteContent.toPlainText())
 
     def doSearch(self):
