@@ -111,3 +111,12 @@ fclose($fptr);
 
     def test_it_can_search_notes(self):
         self.assertEqual(1, len(self.fs.searchNotes("#php")))
+
+    def test_it_can_update_a_note(self):
+        key = "202006151711 online coding tools.md"
+        new_content = """
+# new note
+this is new note content
+        """
+        self.fs.updateNote(key, new_content)
+        self.assertEqual(new_content, self.fs.getNote(key))

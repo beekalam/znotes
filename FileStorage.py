@@ -1,7 +1,7 @@
 import os
 from datetime import datetime
 
-from utils import read_file_content
+from utils import read_file_content, file_put_content
 
 
 class FileStorage:
@@ -55,3 +55,7 @@ class FileStorage:
             print(res)
             return res
         return []
+
+    def updateNote(self, note_id, new_content):
+        if note_id in self.notes.keys():
+            file_put_content(self.notes[note_id], new_content)
