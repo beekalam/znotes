@@ -6,7 +6,8 @@ HIGHLIGHT_JS_PATH = os.path.join(os.path.dirname(__file__), "highlight.js")
 
 def read_tags(path):
     """Reads tags from files"""
-    lines = open(path, 'r').read().split("\n")
+    # lines = open(path, 'r').read().split("\n")
+    lines = read_file_content(path).split("\n")
     res = list(filter(lambda x: x.startswith("tags"), lines))
     if res:
         res = res[0].replace("tags = ", "").replace("#", "").split()
