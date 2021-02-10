@@ -121,8 +121,6 @@ class Notes(QMainWindow):
         dock_widget.setAllowedAreas(Qt.AllDockWidgetAreas)
 
         dock_widget.setWidget(self.list)
-        # for i, path in enumerate(build_file_list()):
-        #     self.list.insertItem(i, path)
         for i, path in enumerate(self.fs.all().keys()):
             self.list.insertItem(i, path)
         self.list.currentRowChanged.connect(self.listview_clicked)
@@ -138,19 +136,11 @@ class Notes(QMainWindow):
             content = self.fs.getNote(self.current_note_path)
             self.noteContent.setPlainText(content)
             self.update_note_markdown_preview(content)
-            # with open(item.text()) as f:
-            # content = f.read()
-            # self.noteContent.clear()
-            # self.noteContent.setPlainText(content)
-            # self.update_note_markdown_preview(content)
 
     def update_note_markdown_preview(self, content):
         markdown_content = markdown.markdown(content, extensions=[GithubFlavoredMarkdownExtension()])
         self.web_view.setHtml(self.htmlDocument.make(markdown_content))
 
-    def get_current_note_file_name(self):
-        if self.current_note_path is not None:
-            return self.current_note_path.split("/")[-1]
 
     def update_current_note(self):
         if self.current_note_path is not None:  # and read_file_content(self.current_note_path) != self.noteContent.toPlainText():
@@ -164,8 +154,6 @@ class Notes(QMainWindow):
         if self.search.text() == "":
             for i, path in enumerate(self.fs.all().keys()):
                 self.list.insertItem(i, path)
-            # for i, path in enumerate(build_file_list()):
-            #     self.list.insertItem(i, path)
         else:
             # res = search(self.search.text())
             self.fs.searchNotes(self.search.text())
