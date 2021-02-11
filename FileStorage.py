@@ -58,8 +58,8 @@ class FileStorage:
         search_tags = [q.replace('#', '') for q in query.split(':') if q.startswith('#')]
 
         res = {}
-        for file, file_path in self.notes.items():
-            print(file, file_path)
+        for file, file_path in self.all().items():
+            # print(file, file_path)
             file_tags = read_tags(file_path)
             if len(search_tags) == 0 or any([search_tag in file_tags for search_tag in search_tags]):
                 if len(terms):
@@ -75,5 +75,4 @@ class FileStorage:
 
     def updateNote(self, note_id, new_content):
         if self._noteChanged(note_id, new_content):
-            print("writing new content....")
             file_put_content(self.notes[note_id], new_content)
