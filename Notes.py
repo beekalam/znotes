@@ -3,7 +3,7 @@ import sys
 import markdown
 from PyQt5 import QtGui, Qt
 from PyQt5.QtCore import Qt
-from PyQt5.QtWebEngineWidgets import QWebEngineView
+from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEnginePage
 from PyQt5.QtWidgets import QApplication, QListWidget, QVBoxLayout, QPlainTextEdit, QLineEdit, \
     QAction, QMainWindow, QDockWidget, QStatusBar, QWidget, QToolBar
 from PyQt5.QtWidgets import QTabWidget
@@ -20,7 +20,7 @@ class Notes(QMainWindow):
         self.list = QListWidget()
         self.web_view = QWebEngineView()
         self.noteContent = QPlainTextEdit()
-        self.tab_bar = QTabWidget(self)
+        self.tab_bar = QTabWidget(self, tabsClosable=True)
         self.search = QLineEdit(self)
         self.htmlDocument = HighlightJSHtmlDocument()
         self.current_note_path = None
@@ -96,6 +96,7 @@ class Notes(QMainWindow):
 
         self.tab_bar.addTab(self.noteContent, "note")
         self.web_view.setHtml("")
+        self.web_view.createWindow = self.addBrowserTab
 
         tab_content_widget = QWidget()
         vbox = QVBoxLayout()
@@ -114,6 +115,13 @@ class Notes(QMainWindow):
 
         # self.tab_bar.addTab(self.web_view, "preview")
         self.setCentralWidget(self.tab_bar)
+
+    def addBrowserTab(self, *args):
+        webview = QWebEngineView()
+        tab_index = self.tab_bar.addTab(webview, 'New tab')
+        webview.createWindow = self.addBrowserTab
+        webview.setHtml("<h1>Blank Tab</h1><p>It is a blank tab</p>")
+        return webview
 
     def createNoteList(self):
         dock_widget = QDockWidget()
@@ -140,7 +148,6 @@ class Notes(QMainWindow):
     def update_note_markdown_preview(self, content):
         markdown_content = markdown.markdown(content, extensions=[GithubFlavoredMarkdownExtension()])
         self.web_view.setHtml(self.htmlDocument.make(markdown_content))
-
 
     def update_current_note(self):
         if self.current_note_path is not None:  # and read_file_content(self.current_note_path) != self.noteContent.toPlainText():
