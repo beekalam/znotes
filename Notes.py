@@ -21,11 +21,16 @@ class Notes(QMainWindow):
         self.web_view = QWebEngineView()
         self.noteContent = QPlainTextEdit()
         self.tab_bar = QTabWidget(self, tabsClosable=True)
+        self.tab_bar.tabCloseRequested.connect(self.removeTab)
         self.search = QLineEdit(self)
         self.htmlDocument = HighlightJSHtmlDocument()
         self.current_note_path = None
         self.fs = FileStorage(NOTES_PATH)
         self.InitializeUI()
+
+    def removeTab(self, index):
+        if (index > 1):
+            self.tab_bar.removeTab(index)
 
     def InitializeUI(self):
         self.setWindowIcon(QtGui.QIcon("icon.png"))
