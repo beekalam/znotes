@@ -3,15 +3,15 @@ import sys
 import markdown
 from PyQt5 import QtGui, Qt
 from PyQt5.QtCore import Qt
-from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEnginePage
+from PyQt5.QtWebEngineWidgets import QWebEngineView
 from PyQt5.QtWidgets import QApplication, QListWidget, QVBoxLayout, QPlainTextEdit, QLineEdit, \
     QAction, QMainWindow, QDockWidget, QStatusBar, QWidget, QToolBar
 from PyQt5.QtWidgets import QTabWidget
 from mdx_gfm import GithubFlavoredMarkdownExtension
 
-from FileStorage import FileStorage
-from HightlightJSHtmlDocument import HighlightJSHtmlDocument
-from NewNote import NewNote, NOTES_PATH
+from Notes.FileStorage import FileStorage
+from Notes.HightlightJSHtmlDocument import HighlightJSHtmlDocument
+from Notes.NewNote import NewNote, NOTES_PATH
 
 
 class Notes(QMainWindow):

@@ -1,7 +1,7 @@
 import os
 
-from HtmlDocument import HtmlDocument
-from utils import read_file_content, HIGHLIGHT_JS_PATH
+from Notes.HtmlDocument import HtmlDocument
+from Notes.utils import read_file_content, HIGHLIGHT_JS_PATH
 
 
 class HighlightJSHtmlDocument(HtmlDocument):

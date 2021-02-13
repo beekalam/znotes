@@ -2,15 +2,15 @@ import os
 import unittest
 from datetime import datetime
 
-from FileStorage import FileStorage
-from utils import file_put_content, file_exists, read_file_content
+from Notes.FileStorage import FileStorage
+from Notes.utils import file_put_content, file_exists, read_file_content
 
 
 class FileStorageTest(unittest.TestCase):
 
     def __init__(self, methodName: str = ...) -> None:
         super().__init__(methodName)
-        self.notes_path = os.path.join(os.getcwd(), "notes_stubs")
+        self.notes_path = os.path.join(os.getcwd(), "tests", "notes_stubs")
 
     def _clean_stub_files(self):
         # clean test stubs
@@ -110,7 +110,8 @@ fclose($fptr);
             self.assertEqual(self.fs.getNote(k), read_file_content(note_path))
 
     def test_it_can_search_notes(self):
-        self.assertEqual(1, len(self.fs.searchNotes("#php")))
+        self.fs.searchNotes("#php")
+        self.assertEqual(1, len(self.fs.getNotes()))
 
     def test_it_can_update_a_note(self):
         key = "202006151711 online coding tools.md"
@@ -120,3 +121,7 @@ this is new note content
         """
         self.fs.updateNote(key, new_content)
         self.assertEqual(new_content, self.fs.getNote(key))
+
+
+if __name__ == "__main__":
+    unittest.main()

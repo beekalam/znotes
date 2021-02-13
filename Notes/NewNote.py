@@ -5,7 +5,7 @@ from PyQt5.Qt import QApplication
 from PyQt5.QtCore import QSize
 from PyQt5.QtWidgets import QMainWindow, QWidget, QPlainTextEdit, QLineEdit, QPushButton, QVBoxLayout
 
-from FileStorage import FileStorage
+from Notes.FileStorage import FileStorage
 
 NOTES_PATH = "/home/moh/Documents/notes/zettle_notes"
 

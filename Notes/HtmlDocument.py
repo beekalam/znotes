@@ -1,8 +1,3 @@
-import os
-
-from utils import read_file_content, HIGHLIGHT_JS_PATH
-
-
 class HtmlDocument:
     def __init__(self) -> None:
         self.jsContent = ""

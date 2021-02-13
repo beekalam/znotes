@@ -1,6 +1,6 @@
 import unittest
 
-from HtmlDocument import HtmlDocument
+from Notes.HtmlDocument import HtmlDocument
 
 
 class HtmlDocumentTest(unittest.TestCase):
@@ -24,3 +24,6 @@ class HtmlDocumentTest(unittest.TestCase):
         htmlDocument = HtmlDocument()
         htmlDocument.addCSS(style)
         self.assertTrue(style in htmlDocument.make(""))
+
+if __name__ == "__main__":
+    unittest.main()
