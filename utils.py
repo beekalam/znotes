@@ -1,7 +1,7 @@
 import os
 
 NOTES_PATH = "/home/moh/Documents/notes/zettle_notes"
-HIGHLIGHT_JS_PATH = os.path.join(os.path.dirname(__file__), "../highlight.js")
+HIGHLIGHT_JS_PATH = os.path.join(os.path.dirname(__file__), "highlight.js")
 
 
 def read_tags(path):

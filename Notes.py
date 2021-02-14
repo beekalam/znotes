@@ -9,9 +9,9 @@ from PyQt5.QtWidgets import QApplication, QListWidget, QVBoxLayout, QPlainTextEd
 from PyQt5.QtWidgets import QTabWidget
 from mdx_gfm import GithubFlavoredMarkdownExtension
 
-from Notes.FileStorage import FileStorage
-from Notes.HightlightJSHtmlDocument import HighlightJSHtmlDocument
-from Notes.NewNote import NewNote, NOTES_PATH
+from FileStorage import FileStorage
+from HightlightJSHtmlDocument import HighlightJSHtmlDocument
+from NewNote import NOTES_PATH, NewNote
 
 
 class Notes(QMainWindow):

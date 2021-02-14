@@ -1,7 +1,7 @@
 import os
 from datetime import datetime
 
-from Notes.utils import read_file_content, file_put_content, read_tags, search_file_content
+from utils import read_file_content, read_tags, search_file_content, file_put_content
 
 
 class FileStorage:
