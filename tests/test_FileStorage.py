@@ -2,8 +2,8 @@ import os
 import unittest
 from datetime import datetime
 
-from Notes.FileStorage import FileStorage
-from Notes.utils import file_put_content, file_exists, read_file_content
+from FileStorage import FileStorage
+from utils import file_put_content, file_exists, read_file_content
 
 
 class FileStorageTest(unittest.TestCase):

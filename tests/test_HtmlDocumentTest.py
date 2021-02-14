@@ -1,6 +1,6 @@
 import unittest
 
-from Notes.HtmlDocument import HtmlDocument
+from HtmlDocument import HtmlDocument
 
 
 class HtmlDocumentTest(unittest.TestCase):
