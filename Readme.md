@@ -1,4 +1,6 @@
 
+[![Build Status](https://travis-ci.com/beekalam/znotes.svg?branch=main)](https://travis-ci.com/beekalam/znotes)
+
 version 0.0.1
 
 - [ ] Add Backward Forward buttons in Webview.
