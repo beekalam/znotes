@@ -2,7 +2,7 @@ import sys
 
 import markdown
 from PyQt5 import QtGui, Qt
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QUrl
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 from PyQt5.QtWidgets import QApplication, QListWidget, QVBoxLayout, QPlainTextEdit, QLineEdit, \
     QAction, QMainWindow, QDockWidget, QStatusBar, QWidget, QToolBar
@@ -43,8 +43,32 @@ class Notes(QMainWindow):
         self.createStatusBar()
 
         self.setTabOrder(self.search, self.list)
+        #############################################################
+        navigation = self.addToolBar('Navigation')
+        style = self.style()
+        self.back = navigation.addAction('Back')
+        self.back.setIcon(style.standardIcon(style.SP_ArrowBack))
+        self.forward = navigation.addAction('Forward')
+        self.forward.setIcon(style.standardIcon(style.SP_ArrowForward))
+        self.reload = navigation.addAction('Reload')
+        self.reload.setIcon(style.standardIcon(style.SP_BrowserReload))
+        self.stop = navigation.addAction('Stop')
+        self.stop.setIcon(style.standardIcon(style.SP_BrowserStop))
+        self.urlbar = QLineEdit()
+        navigation.addWidget(self.urlbar)
+        self.go = navigation.addAction('Go')
+        self.go.setIcon(style.standardIcon(style.SP_DialogOkButton))
+        self.go.triggered.connect(self.on_go)
+
+        ###############################################################################f
 
         self.show()
+
+    def on_go(self):
+        if (self.tab_bar.currentIndex() > 1):
+            self.tab_bar.currentWidget().load(
+                QUrl(self.urlbar.text())
+            )
 
     def create_new_note(self):
         self.dialog = NewNote(self)
