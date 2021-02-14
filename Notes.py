@@ -5,7 +5,7 @@ from PyQt5 import QtGui, Qt
 from PyQt5.QtCore import Qt, QUrl
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 from PyQt5.QtWidgets import QApplication, QListWidget, QVBoxLayout, QPlainTextEdit, QLineEdit, \
-    QAction, QMainWindow, QDockWidget, QStatusBar, QWidget, QToolBar
+    QAction, QMainWindow, QDockWidget, QStatusBar, QWidget, QToolBar, QPushButton
 from PyQt5.QtWidgets import QTabWidget
 from mdx_gfm import GithubFlavoredMarkdownExtension
 
@@ -43,6 +43,8 @@ class Notes(QMainWindow):
         self.createStatusBar()
 
         self.setTabOrder(self.search, self.list)
+        self.new = QPushButton('New')
+        self.tab_bar.setCornerWidget(self.new)
         #############################################################
         navigation = self.addToolBar('Navigation')
         style = self.style()
@@ -58,7 +60,10 @@ class Notes(QMainWindow):
         navigation.addWidget(self.urlbar)
         self.go = navigation.addAction('Go')
         self.go.setIcon(style.standardIcon(style.SP_DialogOkButton))
+
+        self.urlbar.returnPressed.connect(self.on_go)
         self.go.triggered.connect(self.on_go)
+        self.new.clicked.connect(self.addBrowserTab)
 
         ###############################################################################f
 
@@ -66,9 +71,8 @@ class Notes(QMainWindow):
 
     def on_go(self):
         if (self.tab_bar.currentIndex() > 1):
-            self.tab_bar.currentWidget().load(
-                QUrl(self.urlbar.text())
-            )
+            url = self.urlbar.text() if self.urlbar.text().startswith("http") else "http://" + self.urlbar.text()
+            self.tab_bar.currentWidget().load(QUrl(url))
 
     def create_new_note(self):
         self.dialog = NewNote(self)
