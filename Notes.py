@@ -3,7 +3,7 @@ import sys
 import markdown
 from PyQt5 import QtGui, Qt
 from PyQt5.QtCore import Qt, QUrl
-from PyQt5.QtWebEngineWidgets import QWebEngineView
+from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEngineProfile, QWebEnginePage
 from PyQt5.QtWidgets import QApplication, QListWidget, QVBoxLayout, QPlainTextEdit, QLineEdit, \
     QAction, QMainWindow, QDockWidget, QStatusBar, QWidget, QToolBar, QPushButton
 from PyQt5.QtWidgets import QTabWidget
@@ -26,6 +26,9 @@ class Notes(QMainWindow):
         self.htmlDocument = HighlightJSHtmlDocument()
         self.current_note_path = None
         self.fs = FileStorage(NOTES_PATH)
+        # Profile sharing
+        self.profile = QWebEngineProfile()
+
         self.InitializeUI()
 
     def removeTab(self, index):
@@ -151,7 +154,8 @@ class Notes(QMainWindow):
 
     def addBrowserTab(self, *args):
         webview = QWebEngineView()
-        tab_index = self.tab_bar.addTab(webview, 'New tab')
+        page = QWebEnginePage(self.profile)
+        webview.setPage(page)
         webview.createWindow = self.addBrowserTab
         webview.setHtml("""
             <h1>Blank Tab</h1>
@@ -159,6 +163,7 @@ class Notes(QMainWindow):
                 <a href="https://google.com">google</a>
             </p>
         """)
+        tab_index = self.tab_bar.addTab(webview, 'New tab')
         ##########################
         # menu = webview.page().createStandardContextMenu()
         # hit = webview.page().currentFrame().hitTestContent(event.pos())
