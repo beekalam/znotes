@@ -28,6 +28,7 @@ class Notes(QMainWindow):
         self.fs = FileStorage(NOTES_PATH)
         # Profile sharing
         self.profile = QWebEngineProfile()
+        self.profile.setHttpUserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.150 Safari/537.36")
 
         self.InitializeUI()
 
@@ -154,7 +155,7 @@ class Notes(QMainWindow):
 
     def addBrowserTab(self, *args):
         webview = QWebEngineView()
-        page = QWebEnginePage(self.profile)
+        page = QWebEnginePage(self.profile,webview)
         webview.setPage(page)
         webview.createWindow = self.addBrowserTab
         webview.setHtml("""
