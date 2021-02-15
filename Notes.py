@@ -153,7 +153,21 @@ class Notes(QMainWindow):
         webview = QWebEngineView()
         tab_index = self.tab_bar.addTab(webview, 'New tab')
         webview.createWindow = self.addBrowserTab
-        webview.setHtml("<h1>Blank Tab</h1><p>It is a blank tab</p>")
+        webview.setHtml("""
+            <h1>Blank Tab</h1>
+            <p>
+                <a href="https://google.com">google</a>
+            </p>
+        """)
+        ##########################
+        # menu = webview.page().createStandardContextMenu()
+        # hit = webview.page().currentFrame().hitTestContent(event.pos())
+        # url = hit.linkUrl()
+        # if url.isValid():
+        #     self.newTabAction.setData(url)
+        #     menu.addAction(self.newTabAction)
+        # menu.exec_(event.globalPos())
+        ###################
         return webview
 
     def createNoteList(self):
