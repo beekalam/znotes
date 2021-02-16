@@ -28,7 +28,8 @@ class Notes(QMainWindow):
         self.fs = FileStorage(NOTES_PATH)
         # Profile sharing
         self.profile = QWebEngineProfile()
-        self.profile.setHttpUserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.150 Safari/537.36")
+        self.profile.setHttpUserAgent(
+            "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.150 Safari/537.36")
 
         self.InitializeUI()
 
@@ -65,6 +66,10 @@ class Notes(QMainWindow):
         self.go = navigation.addAction('Go')
         self.go.setIcon(style.standardIcon(style.SP_DialogOkButton))
 
+        self.back.triggered.connect(self.on_back)
+        self.forward.triggered.connect(self.on_forward)
+        self.reload.triggered.connect(self.on_reload)
+        self.stop.triggered.connect(self.on_stop)
         self.urlbar.returnPressed.connect(self.on_go)
         self.go.triggered.connect(self.on_go)
         self.new.clicked.connect(self.addBrowserTab)
@@ -72,6 +77,22 @@ class Notes(QMainWindow):
         ###############################################################################f
 
         self.show()
+
+    def on_back(self):
+        if isinstance(self.tab_bar.currentWidget(), QWebEngineView):
+            self.tab_bar.currentWidget().back()
+
+    def on_forward(self):
+        if isinstance(self.tab_bar.currentWidget(), QWebEngineView):
+            self.tab_bar.currentWidget().forward()
+
+    def on_reload(self):
+        if isinstance(self.tab_bar.currentWidget(), QWebEngineView):
+            self.tab_bar.currentWidget().reload()
+
+    def on_stop(self):
+        if isinstance(self.tab_bar.currentWidget(), QWebEngineView):
+            self.tab_bar.currentWidget().stop()
 
     def on_go(self):
         if (self.tab_bar.currentIndex() > 1):
@@ -133,6 +154,8 @@ class Notes(QMainWindow):
 
         self.tab_bar.addTab(self.noteContent, "note")
         self.web_view.setHtml("")
+        page = QWebEnginePage(self.profile, self.web_view)
+        self.web_view.setPage(page)
         self.web_view.createWindow = self.addBrowserTab
 
         tab_content_widget = QWidget()
@@ -155,7 +178,7 @@ class Notes(QMainWindow):
 
     def addBrowserTab(self, *args):
         webview = QWebEngineView()
-        page = QWebEnginePage(self.profile,webview)
+        page = QWebEnginePage(self.profile, webview)
         webview.setPage(page)
         webview.createWindow = self.addBrowserTab
         webview.setHtml("""
