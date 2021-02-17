@@ -1,4 +1,6 @@
 import sys
+import os
+import urllib.parse
 
 import markdown
 from PyQt5 import QtGui, Qt
@@ -100,9 +102,20 @@ class Notes(QMainWindow):
             self.tab_bar.currentWidget().load(QUrl(url))
 
     def create_new_note(self):
-        self.dialog = NewNote(self)
-        self.dialog.closeEvent = self.onNewNoteClosed
-        self.dialog.show()
+        print('on new note')
+        dialog = NewNote(self)
+        dialog.closeEvent = self.onNewNoteClosed
+
+        widget = self.tab_bar.currentWidget()  # type: QWebEngineView
+        if isinstance(widget, QWebEngineView):
+            if selectedText := widget.page().selectedText():
+                title = widget.page().title()
+                dialog.set_title(title)
+                url = widget.page().requestedUrl().toString()
+                url = url + "#:~:text=" + urllib.parse.quote(selectedText[0:100])
+                dialog.set_content(selectedText + "\n\n" + url)
+
+        dialog.show()
 
     def onNewNoteClosed(self, event):
         # todo update notes list here.
@@ -176,15 +189,24 @@ class Notes(QMainWindow):
         # self.tab_bar.addTab(self.web_view, "preview")
         self.setCentralWidget(self.tab_bar)
 
+    def contextMenuEvent(self, event: QtGui.QContextMenuEvent) -> None:
+        print('in on context menu event')
+        print(event)
+
+    def selectionChanged(self):
+        print('in selection chagned')
+
     def addBrowserTab(self, *args):
         webview = QWebEngineView()
         page = QWebEnginePage(self.profile, webview)
+        page.createStandardContextMenu()
         webview.setPage(page)
         webview.createWindow = self.addBrowserTab
         webview.setHtml("""
             <h1>Blank Tab</h1>
             <p>
                 <a href="https://google.com">google</a>
+                <a href="https://www.php.net/manual/en/function.sqlsrv-next-result.php">phplink</a>
             </p>
         """)
         tab_index = self.tab_bar.addTab(webview, 'New tab')

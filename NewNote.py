@@ -43,6 +43,12 @@ class NewNote(QMainWindow):
         self.mainWidget.setLayout(vbox)
         self.setCentralWidget(self.mainWidget)
 
+    def set_title(self, title):
+        self.title.setText(title)
+
+    def set_content(self, content):
+        self.content.setPlainText(content)
+
     def save_btn_click(self):
         title = self.title.text()
         content = self.content.toPlainText()
