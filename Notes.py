@@ -244,8 +244,11 @@ class Notes(QMainWindow):
             self.update_note_markdown_preview(content)
 
     def update_note_markdown_preview(self, content):
-        markdown_content = markdown.markdown(content, extensions=[GithubFlavoredMarkdownExtension()])
-        self.web_view.setHtml(self.htmlDocument.make(markdown_content))
+        try:
+            markdown_content = markdown.markdown(content, extensions=[GithubFlavoredMarkdownExtension()])
+            self.web_view.setHtml(self.htmlDocument.make(markdown_content))
+        except Exception as e:
+            print(str(e))
 
     def update_current_note(self):
         if self.current_note_path is not None:  # and read_file_content(self.current_note_path) != self.noteContent.toPlainText():
