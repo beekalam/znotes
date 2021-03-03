@@ -7,7 +7,7 @@ from PyQt5 import QtGui, Qt
 from PyQt5.QtCore import Qt, QUrl
 from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEngineProfile, QWebEnginePage
 from PyQt5.QtWidgets import QApplication, QListWidget, QVBoxLayout, QPlainTextEdit, QLineEdit, \
-    QAction, QMainWindow, QDockWidget, QStatusBar, QWidget, QToolBar, QPushButton
+    QAction, QMainWindow, QDockWidget, QStatusBar, QWidget, QToolBar, QPushButton, QTextEdit
 from PyQt5.QtWidgets import QTabWidget
 from mdx_gfm import GithubFlavoredMarkdownExtension
 
@@ -22,6 +22,8 @@ class Notes(QMainWindow):
         self.list = QListWidget()
         self.web_view = QWebEngineView()
         self.noteContent = QPlainTextEdit()
+        # self.noteContent = QTextEdit()
+        self.noteContent.setFont(QtGui.QFont("Ubuntu Mono", 13))
         self.tab_bar = QTabWidget(self, tabsClosable=True)
         self.tab_bar.tabCloseRequested.connect(self.removeTab)
         self.search = QLineEdit(self)
