@@ -68,6 +68,7 @@ class FileStorage:
                         res[file] = file_path
                 else:
                     res[file] = file_path
+        self.notes.clear()
         self.notes = res
 
     def _noteChanged(self, note_id, new_content):
